@@ -34,6 +34,8 @@ class MyComponent extends Component {
   render() {
     return (
       <div className="App">
+        <ContractForm contract={"Lock2Pay"} method={"approveCDai"} />
+
         <button type="button" onClick={this.handleApproveClick}>
           Approve
         </button>
