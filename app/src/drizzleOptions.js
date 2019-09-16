@@ -1,4 +1,4 @@
-import DaiSender from "./contracts/DaiSender.json";
+import DaiSender from "./contracts/Lock2Pay.json";
 
 const options = {
   web3: {
