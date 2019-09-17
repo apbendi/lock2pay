@@ -32,6 +32,7 @@ class MyComponent extends Component {
 
     this.handleApproveClick = this.handleApproveClick.bind(this);
     this.handleJumpAheadClick = this.handleJumpAheadClick.bind(this);
+    this.renderContractBalances = this.renderContractBalances.bind(this);
   }
 
   handleApproveClick(event) {
@@ -51,6 +52,15 @@ class MyComponent extends Component {
   handleJumpAheadClick(event) {
     event.preventDefault();
     jumpBlocks(this.web3);
+  }
+
+  renderContractBalances(balanceData) {
+    return (
+        <span>
+          <strong>cDai Locked</strong>: {balanceData.cDaiBalance}<br />
+          <strong>cDai Owed</strong>: {balanceData.cDaiOutstanding}
+        </span>
+      );
   }
 
   render() {
@@ -104,9 +114,11 @@ class MyComponent extends Component {
                 <Card.Body>
                   <Card.Title>Contract State</Card.Title>
                   <Card.Text>
-                    <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
+                    <ContractData contract={"Lock2Pay"} 
+                                  method={"contractBalances"} 
+                                  render={this.renderContractBalances} />
                     <p />
-                    NFTs:
+                    <strong>NFTs Minted</strong>:{" "}
                     <ContractData contract={"LockNFT"} method={"totalSupply"} />
                   </Card.Text>
                 </Card.Body>
