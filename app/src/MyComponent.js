@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { promisify } from 'util';
+import { Container, Row, Col, Button, Card } from 'react-bootstrap';
 
 import {
   AccountData,
@@ -61,57 +62,68 @@ class MyComponent extends Component {
 
     return (
       <div className="App">
-        <div>
-          Block Number: {blockNumber}
-        </div>
+        <Container className="mt-4">
+          <Row className="justify-content-center">
+            <Col md="6">
+              <Card>
+                <Card.Body>
+                  <Card.Title>Current Block</Card.Title>
+                  <Card.Text>{blockNumber}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
-        <p />
+          <p />
 
-        <ContractForm contract={"Lock2Pay"} method={"approveCDai"} />
-        <p />
+          <ContractForm contract={"Lock2Pay"} method={"approveCDai"} />
+          <p />
 
-        <button type="button" onClick={this.handleApproveClick}>
-          Approve
-        </button>
+          <Button onClick={this.handleApproveClick}>Approve</Button>
 
-        <p />
+          <button type="button" onClick={this.handleApproveClick}>
+            Approve
+          </button>
 
-        Send Dai
-        <ContractForm contract={"Lock2Pay"} method={"lockDai"} />
+          <p />
 
-        <p />
+          Send Dai
+          <ContractForm contract={"Lock2Pay"} method={"lockDai"} />
 
-        Redeem Dai
-        <ContractForm contract={"Lock2Pay"} method={"redeemDai"} />
+          <p />
 
-        <p />
+          Redeem Dai
+          <ContractForm contract={"Lock2Pay"} method={"redeemDai"} />
 
-        Redeem Profit
-        <ContractForm contract={"Lock2Pay"} method={"withdrawProfit"} />
+          <p />
 
-        <p />
+          Redeem Profit
+          <ContractForm contract={"Lock2Pay"} method={"withdrawProfit"} />
 
-        <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
+          <p />
 
-        <p />
+          <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
 
-        NFT Address:{" "}
-        <ContractData contract={"Lock2Pay"} method={"nftAddr"} />
-        <ContractForm contract={"Lock2Pay"} method={"setNFTAddr"} />
+          <p />
 
-        <p />
-        MinterAddress:{" "}
-        <ContractData contract={"LockNFT"} method={"minter"} />
-        <ContractForm contract={"LockNFT"} method={"setMinter"} />
+          NFT Address:{" "}
+          <ContractData contract={"Lock2Pay"} method={"nftAddr"} />
+          <ContractForm contract={"Lock2Pay"} method={"setNFTAddr"} />
 
-        NFTs:
-        <ContractData contract={"LockNFT"} method={"totalSupply"} />
+          <p />
+          MinterAddress:{" "}
+          <ContractData contract={"LockNFT"} method={"minter"} />
+          <ContractForm contract={"LockNFT"} method={"setMinter"} />
 
-        <p />
+          NFTs:
+          <ContractData contract={"LockNFT"} method={"totalSupply"} />
 
-        <button type="button" onClick={this.handleJumpAheadClick}>
-          Jump Blocks
-        </button>
+          <p />
+
+          <button type="button" onClick={this.handleJumpAheadClick}>
+            Jump Blocks
+          </button>
+        </Container>
       </div>
     );
   }
