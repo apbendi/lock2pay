@@ -63,12 +63,34 @@ class MyComponent extends Component {
     return (
       <div className="App">
         <Container className="mt-4">
-          <Row className="justify-content-center">
-            <Col md="6">
+
+        <Row className="justify-content-center">
+          <Col md="6">
+            <Card>
+              <Card.Body>
+                <Card.Title>Current Block</Card.Title>
+                <Card.Text>{blockNumber}</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+
+        <p />
+
+        <Row className="justify-content-center">
+          <Col md="6">
               <Card>
                 <Card.Body>
-                  <Card.Title>Current Block</Card.Title>
-                  <Card.Text>{blockNumber}</Card.Text>
+                  <Card.Title>User Interface</Card.Title>
+                  <Card.Text>
+                    <Button onClick={this.handleApproveClick}>Approve 1000 Dai</Button>
+                    <p />
+                    Send Dai
+                    <ContractForm contract={"Lock2Pay"} method={"lockDai"} />
+                    <p />
+                    Redeem Dai
+                    <ContractForm contract={"Lock2Pay"} method={"redeemDai"} />
+                  </Card.Text>
                 </Card.Body>
               </Card>
             </Col>
@@ -76,53 +98,62 @@ class MyComponent extends Component {
 
           <p />
 
-          <ContractForm contract={"Lock2Pay"} method={"approveCDai"} />
-          <p />
-
-          <Button onClick={this.handleApproveClick}>Approve</Button>
-
-          <button type="button" onClick={this.handleApproveClick}>
-            Approve
-          </button>
-
-          <p />
-
-          Send Dai
-          <ContractForm contract={"Lock2Pay"} method={"lockDai"} />
-
-          <p />
-
-          Redeem Dai
-          <ContractForm contract={"Lock2Pay"} method={"redeemDai"} />
+          <Row className="justify-content-center">
+            <Col md="6">
+              <Card>
+                <Card.Body>
+                  <Card.Title>Contract State</Card.Title>
+                  <Card.Text>
+                    <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
+                    <p />
+                    NFTs:
+                    <ContractData contract={"LockNFT"} method={"totalSupply"} />
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
           <p />
 
-          Redeem Profit
-          <ContractForm contract={"Lock2Pay"} method={"withdrawProfit"} />
+          <Row className="justify-content-center">
+            <Col md="6">
+              <Card>
+                <Card.Body>
+                  <Card.Title>Admin Interface</Card.Title>
+                  <Card.Text>
+                    Approve cDai
+                    <ContractForm contract={"Lock2Pay"} method={"approveCDai"} />
+                    <p />
+                    Redeem Profit
+                    <ContractForm contract={"Lock2Pay"} method={"withdrawProfit"} />
+                  </Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
 
           <p />
 
-          <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
-
-          <p />
-
-          NFT Address:{" "}
-          <ContractData contract={"Lock2Pay"} method={"nftAddr"} />
-          <ContractForm contract={"Lock2Pay"} method={"setNFTAddr"} />
-
-          <p />
-          MinterAddress:{" "}
-          <ContractData contract={"LockNFT"} method={"minter"} />
-          <ContractForm contract={"LockNFT"} method={"setMinter"} />
-
-          NFTs:
-          <ContractData contract={"LockNFT"} method={"totalSupply"} />
-
-          <p />
-
-          <button type="button" onClick={this.handleJumpAheadClick}>
-            Jump Blocks
-          </button>
+          <Row className="justify-content-center">
+            <Col md="6">
+              <Card>
+                <Card.Body>
+                  <Card.Title>Config Interface</Card.Title>
+                  <Card.Text>
+                  NFT Address:{" "}
+                  <ContractData contract={"Lock2Pay"} method={"nftAddr"} />
+                  <ContractForm contract={"Lock2Pay"} method={"setNFTAddr"} />
+                  <p />
+                  MinterAddress:{" "}
+                  <ContractData contract={"LockNFT"} method={"minter"} />
+                  <ContractForm contract={"LockNFT"} method={"setMinter"} />
+                  </Card.Text>
+                  <Button onClick={this.handleJumpAheadClick}>Jump Blocks</Button>
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
         </Container>
       </div>
     );
