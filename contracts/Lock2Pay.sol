@@ -7,6 +7,10 @@ interface IERC20 {
     function transferFrom(address from, address to, uint256 value) external returns (bool);
 }
 
+interface ICERC20 {
+    function mint(uint mintAmount) external returns (uint);
+}
+
 contract Lock2Pay {
 
     address daiAddr = address(0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359);
@@ -20,5 +24,8 @@ contract Lock2Pay {
     function lockDai(uint256 amount) public {
         IERC20 daiToken = IERC20(daiAddr);
         daiToken.transferFrom(msg.sender, address(this), amount);
+
+        ICERC20 cDai = ICERC20(cDaiAddr);
+        require(0 == cDai.mint(amount), "MINT_FAILURE");
     }
 }
