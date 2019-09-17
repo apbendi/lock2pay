@@ -52,6 +52,11 @@ class MyComponent extends Component {
 
         <p />
 
+        Redeem Profit
+        <ContractForm contract={"Lock2Pay"} method={"withdrawProfit"} />
+
+        <p />
+
         <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
       </div>
     );

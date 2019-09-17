@@ -1,5 +1,14 @@
 pragma solidity >=0.5.0 <0.6.0;
 
+/*
+DO NEXT:
+
+- Add owner in constructor
+- Make ownerOnly modifier
+- Add onlyOwner function for withdrawing the cDai balance > cDaiOwed
+- In aformentioned funciton, convert cDai to Dai before transferring to owner
+*/
+
 interface IERC20 {
     function balanceOf(address who) external view returns (uint256);
     function transfer(address to, uint256 value) external returns (bool);
@@ -10,7 +19,7 @@ interface IERC20 {
 interface ICERC20 {
     function mint(uint mintAmount) external returns (uint);
     function redeemUnderlying(uint redeemAmount) external returns (uint);
-    function exchangeRateStored() external view returns (uint);
+    function redeem(uint redeemTokens) external returns (uint);
     function balanceOfUnderlying(address account) external returns (uint);
 }
 
@@ -18,6 +27,7 @@ contract Lock2Pay {
 
     address daiAddr = address(0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359);
     address cDaiAddr = address(0xF5DCe57282A584D2746FaF1593d3121Fcac444dC);
+    address owner;
 
     struct LockUp {
         uint256 amount;
@@ -28,6 +38,10 @@ contract Lock2Pay {
     mapping(address => LockUp) locks;
     uint256 cDaiOwed;
 
+    constructor() public {
+        owner = msg.sender;
+    }
+
     function approveCDai() public {
         IERC20 daiToken = IERC20(daiAddr);
         daiToken.approve(cDaiAddr, 1000000 ether);
@@ -35,9 +49,10 @@ contract Lock2Pay {
 
     function lockDai(uint256 amount) public {
         require(0 == locks[msg.sender].amount, "EXISTING_BALANCE");
-        IERC20 cDaiToken = IERC20(cDaiAddr);
 
+        IERC20 cDaiToken = IERC20(cDaiAddr);
         IERC20 daiToken = IERC20(daiAddr);
+
         daiToken.transferFrom(msg.sender, address(this), amount);
 
         ICERC20 cDai = ICERC20(cDaiAddr);
@@ -68,6 +83,21 @@ contract Lock2Pay {
         delete locks[msg.sender];
     }
 
+    function withdrawProfit(uint256 cDaiAmount) public onlyOwner {
+        IERC20 cDaiToken = IERC20(cDaiAddr);
+        uint256 cDaiBalance = cDaiToken.balanceOf(address(this));
+        uint256 available = cDaiBalance - cDaiOwed;
+
+        require(cDaiAmount <= available, "INSUFFICIENT_AVAILBLE");
+
+        ICERC20 cDai = ICERC20(cDaiAddr);
+        require(0 == cDai.redeem(cDaiAmount), "REDEEM_FAILURE");
+
+        IERC20 daiToken = IERC20(daiAddr);
+        uint256 daiBalance = daiToken.balanceOf(address(this));
+        daiToken.transfer(owner, daiBalance);
+    }
+
     function contractBalances() public view returns (uint256 daiBalance, uint256 cDaiBalance, uint256 cDaiOutstanding) {
         IERC20 daiToken = IERC20(daiAddr);
         IERC20 cDaiToken = IERC20(cDaiAddr);
@@ -77,5 +107,10 @@ contract Lock2Pay {
                 cDaiToken.balanceOf(address(this)),
                 cDaiOwed
                );
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "NOT_OWNER");
+        _;
     }
 }
