@@ -23,10 +23,17 @@ interface ICERC20 {
     function balanceOfUnderlying(address account) external returns (uint);
 }
 
+interface ILockNFT {
+    function mint(address receiver) external;
+}
+
 contract Lock2Pay {
 
     address daiAddr = address(0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359);
     address cDaiAddr = address(0xF5DCe57282A584D2746FaF1593d3121Fcac444dC);
+    uint256 public minLockAmount = 1000 ether;
+    uint256 public blockWait = 1000;
+
     address public owner;
     address public nftAddr;
 
@@ -43,6 +50,8 @@ contract Lock2Pay {
         owner = msg.sender;
     }
 
+    // PUBLIC USER
+
     function approveCDai() public {
         IERC20 daiToken = IERC20(daiAddr);
         daiToken.approve(cDaiAddr, 1000000 ether);
@@ -50,6 +59,7 @@ contract Lock2Pay {
 
     function lockDai(uint256 amount) public {
         require(0 == locks[msg.sender].amount, "EXISTING_BALANCE");
+        require(amount >= minLockAmount, "BELOW_MIN");
 
         IERC20 cDaiToken = IERC20(cDaiAddr);
         IERC20 daiToken = IERC20(daiAddr);
@@ -81,7 +91,20 @@ contract Lock2Pay {
         IERC20 daiToken = IERC20(daiAddr);
         daiToken.transfer(msg.sender, amountLocked);
 
+        uint256 blocksWaited = block.number - locks[msg.sender].blockLocked;
+
+        if (blocksWaited > blockWait) {
+            ILockNFT lockNFT = ILockNFT(nftAddr);
+            lockNFT.mint(msg.sender);
+        }
+
         delete locks[msg.sender];
+    }
+
+    // PUBLIC OWNER
+
+    function setNFTAddr(address _nftAddr) public onlyOwner {
+        nftAddr = _nftAddr;
     }
 
     function withdrawProfit(uint256 cDaiAmount) public onlyOwner {
@@ -99,6 +122,8 @@ contract Lock2Pay {
         daiToken.transfer(owner, daiBalance);
     }
 
+    // PUBLIC VIEW
+
     function contractBalances() public view returns (uint256 daiBalance, uint256 cDaiBalance, uint256 cDaiOutstanding) {
         IERC20 daiToken = IERC20(daiAddr);
         IERC20 cDaiToken = IERC20(cDaiAddr);
@@ -109,6 +134,8 @@ contract Lock2Pay {
                 cDaiOwed
                );
     }
+
+    // MODIFIERS
 
     modifier onlyOwner() {
         require(msg.sender == owner, "NOT_OWNER");

@@ -95,7 +95,17 @@ class MyComponent extends Component {
 
         <p />
 
+        NFT Address:{" "}
         <ContractData contract={"Lock2Pay"} method={"nftAddr"} />
+        <ContractForm contract={"Lock2Pay"} method={"setNFTAddr"} />
+
+        <p />
+        MinterAddress:{" "}
+        <ContractData contract={"LockNFT"} method={"minter"} />
+        <ContractForm contract={"LockNFT"} method={"setMinter"} />
+
+        NFTs:
+        <ContractData contract={"LockNFT"} method={"totalSupply"} />
 
         <p />
 

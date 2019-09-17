@@ -1,4 +1,5 @@
-import DaiSender from "./contracts/Lock2Pay.json";
+import Lock2Pay from "./contracts/Lock2Pay.json";
+import LockNFT from "./contracts/LockNFT.json";
 
 const options = {
   web3: {
@@ -8,7 +9,7 @@ const options = {
     //   url: "ws://127.0.0.1:8545",
     // },
   },
-  contracts: [DaiSender],
+  contracts: [Lock2Pay, LockNFT],
   events: {
   },
   polls: {
