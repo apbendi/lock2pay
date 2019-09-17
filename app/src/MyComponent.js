@@ -44,6 +44,15 @@ class MyComponent extends Component {
 
         Send Dai
         <ContractForm contract={"Lock2Pay"} method={"lockDai"} />
+
+        <p />
+
+        Redeem Dai
+        <ContractForm contract={"Lock2Pay"} method={"redeemDai"} />
+
+        <p />
+
+        <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
       </div>
     );
   }
