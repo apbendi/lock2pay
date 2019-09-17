@@ -95,6 +95,10 @@ class MyComponent extends Component {
 
         <p />
 
+        <ContractData contract={"Lock2Pay"} method={"nftAddr"} />
+
+        <p />
+
         <button type="button" onClick={this.handleJumpAheadClick}>
           Jump Blocks
         </button>

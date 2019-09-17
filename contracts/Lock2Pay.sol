@@ -39,9 +39,8 @@ contract Lock2Pay {
     mapping(address => LockUp) locks;
     uint256 cDaiOwed;
 
-    constructor(address _nftAddr) public {
+    constructor() public {
         owner = msg.sender;
-        nftAddr = _nftAddr;
     }
 
     function approveCDai() public {
