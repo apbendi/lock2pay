@@ -16,7 +16,7 @@ function advanceBlock (web3) {
 }
 
 async function jumpBlocks(web3) {
-    for(var i = 0; i < 6000; i++) {
+    for(var i = 0; i < 1000; i++) {
       await advanceBlock(web3);
     }
 }
@@ -41,7 +41,7 @@ class MyComponent extends Component {
     var daiTokenAddr = "0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359";
     var daiTokenContract = new web3.eth.Contract(daiTokenABI, daiTokenAddr);
 
-    var approveAmount = web3.utils.toWei("100", "ether");
+    var approveAmount = web3.utils.toWei("1000", "ether");
 
     let approval = daiTokenContract.methods.approve(this.lock2PayContract.address, approveAmount);
     approval.send({from: this.props.accounts[0]});

@@ -27,19 +27,21 @@ contract Lock2Pay {
 
     address daiAddr = address(0x89d24A6b4CcB1B6fAA2625fE562bDD9a23260359);
     address cDaiAddr = address(0xF5DCe57282A584D2746FaF1593d3121Fcac444dC);
-    address owner;
+    address public owner;
+    address public nftAddr;
 
     struct LockUp {
         uint256 amount;
         uint256 cDaiMinted;
-        uint256 dateLocked;
+        uint256 blockLocked;
     }
 
     mapping(address => LockUp) locks;
     uint256 cDaiOwed;
 
-    constructor() public {
+    constructor(address _nftAddr) public {
         owner = msg.sender;
+        nftAddr = _nftAddr;
     }
 
     function approveCDai() public {
@@ -65,7 +67,7 @@ contract Lock2Pay {
 
         locks[msg.sender].amount = amount;
         locks[msg.sender].cDaiMinted = minted;
-        locks[msg.sender].dateLocked = block.timestamp;
+        locks[msg.sender].blockLocked = block.number;
     }
 
     function redeemDai() public {
