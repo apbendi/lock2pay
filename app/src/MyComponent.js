@@ -33,6 +33,7 @@ class MyComponent extends Component {
     this.handleApproveClick = this.handleApproveClick.bind(this);
     this.handleJumpAheadClick = this.handleJumpAheadClick.bind(this);
     this.renderContractBalances = this.renderContractBalances.bind(this);
+    this.handleSendClick = this.handleSendClick.bind(this);
   }
 
   handleApproveClick(event) {
@@ -52,6 +53,12 @@ class MyComponent extends Component {
   handleJumpAheadClick(event) {
     event.preventDefault();
     jumpBlocks(this.web3);
+  }
+
+  handleSendClick(event) {
+    event.preventDefault();
+
+    this.lock2PayContract.methods.lockDai.cacheSend(this.web3.utils.toWei("1000", "ether"));
   }
 
   renderContractBalances(balanceData) {
@@ -95,8 +102,7 @@ class MyComponent extends Component {
                   <Card.Text>
                     <Button onClick={this.handleApproveClick}>Approve 1000 Dai</Button>
                     <p />
-                    Send Dai
-                    <ContractForm contract={"Lock2Pay"} method={"lockDai"} />
+                    <Button onClick={this.handleSendClick}>Lock 1000 Dai</Button>
                     <p />
                     Redeem Dai
                     <ContractForm contract={"Lock2Pay"} method={"redeemDai"} />
@@ -114,8 +120,8 @@ class MyComponent extends Component {
                 <Card.Body>
                   <Card.Title>Contract State</Card.Title>
                   <Card.Text>
-                    <ContractData contract={"Lock2Pay"} 
-                                  method={"contractBalances"} 
+                    <ContractData contract={"Lock2Pay"}
+                                  method={"contractBalances"}
                                   render={this.renderContractBalances} />
                     <p />
                     <strong>NFTs Minted</strong>:{" "}
