@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { promisify } from 'util';
+
 import {
   AccountData,
   ContractData,
   ContractForm,
 } from "@drizzle/react-components";
+
+function advanceBlock (web3) {
+  return promisify(web3.currentProvider.send.bind(web3.currentProvider))({
+    jsonrpc: '2.0',
+    method: 'evm_mine',
+  });
+}
+
+async function jumpBlocks(web3) {
+    for(var i = 0; i < 6000; i++) {
+      await advanceBlock(web3);
+    }
+}
 
 class MyComponent extends Component {
 
@@ -15,6 +30,7 @@ class MyComponent extends Component {
     this.lock2PayContract = context.drizzle.contracts.Lock2Pay;
 
     this.handleApproveClick = this.handleApproveClick.bind(this);
+    this.handleJumpAheadClick = this.handleJumpAheadClick.bind(this);
   }
 
   handleApproveClick(event) {
@@ -31,10 +47,28 @@ class MyComponent extends Component {
     approval.send({from: this.props.accounts[0]});
   }
 
+  handleJumpAheadClick(event) {
+    event.preventDefault();
+    jumpBlocks(this.web3);
+  }
+
   render() {
+    var blockNumber = 0
+
+    if(this.props.currentBlock.number !== undefined) {
+      blockNumber = this.props.currentBlock.number;
+    }
+
     return (
       <div className="App">
+        <div>
+          Block Number: {blockNumber}
+        </div>
+
+        <p />
+
         <ContractForm contract={"Lock2Pay"} method={"approveCDai"} />
+        <p />
 
         <button type="button" onClick={this.handleApproveClick}>
           Approve
@@ -58,6 +92,12 @@ class MyComponent extends Component {
         <p />
 
         <ContractData contract={"Lock2Pay"} method={"contractBalances"} />
+
+        <p />
+
+        <button type="button" onClick={this.handleJumpAheadClick}>
+          Jump Blocks
+        </button>
       </div>
     );
   }

@@ -5,6 +5,7 @@ const mapStateToProps = state => {
   return {
     accounts: state.accounts,
     lock2PayState: state.contracts.Lock2Pay,
+    currentBlock: state.currentBlock,
   };
 };
 
